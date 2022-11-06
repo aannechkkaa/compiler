@@ -7,62 +7,80 @@ class Game
 {
     static void Main()
     {
-        //StreamReader fin = new StreamReader("input1.txt");
-        //StreamWriter fout = new StreamWriter("output.txt");
-
-        //string strin = fin.ReadLine();
-
-        //fin.Close();
         int countline = 0;
         int countlex = 0;
         string output;
-        string lexemtype;
-
+        string lexemtype = "";
+        int IsSeparator = -1;
+        int IsKeyWord = -1;
+        int SepinString = -1;
+        string[] separators = { "+", "-", "*", "/", ".", ",", ":", ";", "=", "<", ">", "<=", ">=", ":=", "..", "(", ")", "[", "]" };
+        string[] KeyWords = { "program", "var", "integer", "real", "bool", "begin", "end", "if", "then", "else", "while", "do", "read", "write", "true", "false" };
        // StreamReader hin = new StreamReader("output1.txt");
         foreach (string line in System.IO.File.ReadLines(@"input1.txt"))
         {
-
-            //System.Console.WriteLine(line);
-            string[] lexems = line.Split(' ');
-            //Console.WriteLine(lexems[1]);
+            string newline = line.Replace("    ", "");
+            string[] lexems = newline.Split(' ');
             countline++;
-            //Console.WriteLine(countline);
-            for (int i = 0; i < lexems.Length; i++)
+            string lexema = "";
+            for (int k = 0; k < lexems.Length; k++)
             {
-                countlex = i;
-                if (int.TryParse(lexems[i], out int numberint))
-                {
-                    //Console.WriteLine("Вы ввели число {0}", numberint);
-                    lexemtype = "integer";
-                    //break;
+                for (int m = 0; m < lexems[k].Length; m++){
+                    IsSeparator = Array.IndexOf(separators, lexems[k][m]);
+                    if (IsSeparator != -1)
+                    {
+                        lexemtype = "Separator";
+                        countlex++;
+                        break;
+                    }
+                    else {
+                        lexema = lexema + lexems[k][m];
+                        IsSeparator = Array.IndexOf(separators, lexema);
+                        IsKeyWord = Array.IndexOf(KeyWords, lexema);
+                        if (IsKeyWord != -1)
+                        {
+                            lexemtype = "KeyWord";
+                            countlex++;
+                            IsKeyWord = -1;
+                            
+                            break;
+                        }
+                        else if (IsSeparator != -1)
+                        {
+                            lexemtype = "Separator";
+                            countlex++;
+           
+                            IsSeparator = -1;
+                            
+                            break;
+                        }
+                        else if (float.TryParse(lexema, out float numberfloat))
+                        {
+                            lexemtype = "float";
+                            countlex++;
+                            
+                            break;
+                        }
+                        else
+                        {
+                            lexemtype = "string";
+                        }
+                    }
+                    
+                    
+
                 }
-                else if(float.TryParse(lexems[i], out float numberfloat))
-                {
-                    lexemtype = "float";
-                    //break;
-                }
-                else
-                {
-                    lexemtype = "string";
-                }
-                Console.WriteLine(countline.ToString() +  ' ' + (countlex + 1).ToString() + ' ' + lexemtype + ' ' + lexems[i]);
+
+                Console.WriteLine(countline.ToString() + ' ' + (countlex + 1).ToString() + ' ' + lexemtype + ' ' + lexema);
+                IsKeyWord = -1;
+                IsSeparator = -1;
+                lexema = "";
+
             }
-            
 
-            
+           
         }
-
-        //System.Console.WriteLine("There were {0} lines.", counter);
-
-        //string strout = hin.ReadLine();
-       // Console.WriteLine(strin);
-
-        //strin = fin.ReadLine();
-        //Console.WriteLine(strin);
-
-        //if (strin == strout)
-        //{
-        //    Console.WriteLine(strin);
-        //}
     }
 }
+
+
