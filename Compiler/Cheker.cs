@@ -14,7 +14,7 @@ class Game
         int IsSeparator = -1;
         int IsKeyWord = -1;
         int SepinString = -1;
-        string[] separators = { "+", "-", "*", "/", ".", ",", ":", ";", "=", "<", ">", "<=", ">=", ":=", "..", "(", ")", "[", "]" };
+        string[] separators = { "+", "-", "*", "/", ".", ",", ":", ";", "=", "<", ">", "<=", ">=", ":=", "..", "(",")", ",", "[","]" };
         string[] KeyWords = { "program", "var", "integer", "real", "bool", "begin", "end", "if", "then", "else", "while", "do", "read", "write", "true", "false" };
        // StreamReader hin = new StreamReader("output1.txt");
         foreach (string line in System.IO.File.ReadLines(@"input1.txt"))
@@ -30,6 +30,7 @@ class Game
                     if (IsSeparator != -1)
                     {
                         lexemtype = "Separator";
+
                         countlex++;
                         break;
                     }
@@ -54,13 +55,22 @@ class Game
                             
                             break;
                         }
+                        if (int.TryParse(lexema, out int numberint))
+                        {
+                            //Console.WriteLine("Вы ввели число {0}", numberint);
+                            lexemtype = "integer";
+                            countlex++;
+
+                            break;
+                        }
                         else if (float.TryParse(lexema, out float numberfloat))
                         {
                             lexemtype = "float";
                             countlex++;
-                            
+
                             break;
                         }
+                        
                         else
                         {
                             lexemtype = "string";
