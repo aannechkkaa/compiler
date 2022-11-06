@@ -82,9 +82,18 @@ class Game
                 }
 
                 Console.WriteLine(countline.ToString() + ' ' + (countlex + 1).ToString() + ' ' + lexemtype + ' ' + lexema);
+                if (IsSeparator != -1)
+                {
+                    lexema = lexema.Remove(lexema.Length - 1);
+                }
+                else
+                {
+                    lexema = "";
+                }
                 IsKeyWord = -1;
                 IsSeparator = -1;
-                lexema = "";
+                
+                
 
             }
 
